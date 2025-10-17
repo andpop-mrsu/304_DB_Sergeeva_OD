@@ -1,4 +1,4 @@
-@echo off
+#!/bin/bash
 chcp 65001 > nul
 
 sqlite3 movies_rating.db < db_init.sql
@@ -30,8 +30,7 @@ echo.
 
 echo 6. Найти все комедии, выпущенные после 2000 года, которые понравились мужчинам (оценка не ниже 4.5). Для каждого фильма в этом списке вывести название, год выпуска и количество таких оценок. Результат отсортировать по году выпуска и названию фильма.
 echo --------------------------------------------------
-sqlite3 movies_rating.db -box "SELECT m.title, m.year, COUNT(*) as high_ratings_count FROM movies m JOIN ratings r ON m.id = r.movie_id JOIN users u ON r.user_id = u.id WHERE m.genres LIKE '%%Comedy%%' AND m.year > 2000 AND r.rating >= 4.5 AND u.gender = 'M' GROUP BY m.id, m.title, m.year ORDER BY m.year, m.title;"
-echo.
+sqlite3 movies_rating.db -box "SELECT m.title, m.year, COUNT(*) as high_ratings_count FROM movies m JOIN ratings r ON m.id = r.movie_id JOIN users u ON r.user_id = u.id WHERE m.genres LIKE '%Comedy%' AND m.year > 2000 AND r.rating >= 4.5 AND u.gender = 'M' GROUP BY m.id, m.title, m.year ORDER BY m.year, m.title;"
 
 echo 7. Провести анализ занятий пользователей - вывести количество пользователей для каждого рода занятий. Найти самую распространенную и самую редкую профессию посетителей сайта.
 echo --------------------------------------------------
