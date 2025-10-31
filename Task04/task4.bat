@@ -1,5 +1,5 @@
 #!/bin/bash
-chcp 65001
+chcp 65001 2>/dev/null || true
 
 sqlite3 movies_rating.db < db_init.sql
 
@@ -20,7 +20,7 @@ echo " "
 
 echo "4. Вычислить количество оценок и среднюю оценку, которую дали фильмам пользователи-мужчины в период с 2011 по 2014 год."
 echo "--------------------------------------------------"
-sqlite3 movies_rating.db -box -echo "SELECT COUNT(*) as количество_оценок, AVG(r.rating) as средняя_оценка FROM ratings r JOIN users u ON r.user_id = u.id WHERE u.gender = 'M' AND strftime('%%Y', datetime(r.timestamp, 'unixepoch')) BETWEEN '2011' AND '2014';"
+sqlite3 movies_rating.db -box -echo "SELECT COUNT(*) as количество_оценок, AVG(r.rating) as средняя_оценка FROM ratings r JOIN users u ON r.user_id = u.id WHERE u.gender = 'M' AND strftime('%Y', datetime(r.timestamp, 'unixepoch')) BETWEEN '2011' AND '2014';"
 echo " "
 
 echo "5. Составить список фильмов с указанием средней оценки и количества пользователей, которые их оценили. Полученный список отсортировать по году выпуска и названиям фильмов. В списке оставить первые 20 записей."
@@ -40,5 +40,5 @@ echo " "
 
 echo "8. С помощью рекурсивного CTE определить, на какие дни недели приходился ваш день рождения в каждом году."
 echo "--------------------------------------------------"
-sqlite3 movies_rating.db -box -echo "WITH RECURSIVE birthday_years(year) AS (SELECT 2000 UNION ALL SELECT year + 1 FROM birthday_years WHERE year < 2024) SELECT year, CASE CAST(strftime('%%w', year || '-03-15') AS INTEGER) WHEN 0 THEN 'Воскресенье' WHEN 1 THEN 'Понедельник' WHEN 2 THEN 'Вторник' WHEN 3 THEN 'Среда' WHEN 4 THEN 'Четверг' WHEN 5 THEN 'Пятница' ELSE 'Суббота' END AS day_of_week FROM birthday_years;"
+sqlite3 movies_rating.db -box -echo "WITH RECURSIVE birthday_years(year) AS (SELECT 2000 UNION ALL SELECT year + 1 FROM birthday_years WHERE year < 2024) SELECT year, CASE CAST(strftime('%w', year || '-04-01') AS INTEGER) WHEN 0 THEN 'Воскресенье' WHEN 1 THEN 'Понедельник' WHEN 2 THEN 'Вторник' WHEN 3 THEN 'Среда' WHEN 4 THEN 'Четверг' WHEN 5 THEN 'Пятница' ELSE 'Суббота' END AS day_of_week FROM birthday_years;"
 echo " "
